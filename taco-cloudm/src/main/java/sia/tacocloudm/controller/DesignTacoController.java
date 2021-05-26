@@ -3,13 +3,16 @@ package sia.tacocloudm.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import sia.tacocloudm.domain.Ingredient;
 import sia.tacocloudm.domain.Taco;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +27,16 @@ public class DesignTacoController {
     public String showDesignForm(final Model model) {
         model.addAttribute("taco", new Taco());
         return "design";
+    }
+
+    @PostMapping
+    public String processTaco(@Valid Taco taco, Errors errors){
+        if(errors.hasErrors()) {
+            return "design";
+        }
+
+        log.info("Processing taco: {}", taco);
+        return "redirect:/orders/current";
     }
 
     @ModelAttribute
