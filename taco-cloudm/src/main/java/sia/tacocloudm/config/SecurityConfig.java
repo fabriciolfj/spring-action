@@ -45,6 +45,8 @@ public class SecurityConfig  {
                 .antMatchers("/", "/**").permitAll()
                 .and().formLogin().loginPage("/login")
                 .defaultSuccessUrl("/design", true)
+                .and()
+                .oauth2Login().loginPage("/login")
                 .and().build();
     }
 
