@@ -1,0 +1,8 @@
+
+.idea/
+
+*.db
+
+*.cql
+
+taco-cloudm/cassandra_local/data/tacocloud/tacos-3fc27970bee511eb89d76f7c8ee5155a/snapshots/dropped-1622117794053-tacos/
