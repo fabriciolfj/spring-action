@@ -1,6 +1,7 @@
 package sia.tacocloudm.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import sia.tacocloudm.domain.Ingredient;
 import sia.tacocloudm.domain.Taco;
+import sia.tacocloudm.repository.IngredientRepository;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -22,6 +24,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
+
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
     @GetMapping
     public String showDesignForm(final Model model) {
@@ -41,17 +46,7 @@ public class DesignTacoController {
 
     @ModelAttribute
     public void addIngredientsToModel(final Model model) {
-        final var ingredients = Arrays.asList(
-                new Ingredient("FLTO", "Flour Tortilla", Ingredient.Type.WRAP),
-                new Ingredient("COTO", "Corn Tortilla", Ingredient.Type.WRAP),
-                new Ingredient("GRBF", "Ground Beef", Ingredient.Type.PROTEIN),
-                new Ingredient("CARN", "Carnitas", Ingredient.Type.VEGGIES),
-                new Ingredient("LETC", "Lettuce", Ingredient.Type.VEGGIES),
-                new Ingredient("CHED", "Cheddar", Ingredient.Type.CHEESE),
-                new Ingredient("JACK", "Monterrey Jack", Ingredient.Type.CHEESE),
-                new Ingredient("SRCR", "Sour Cream", Ingredient.Type.SAUCE)
-        );
-
+        List<Ingredient> ingredients = (List<Ingredient>) ingredientRepository.findAll();
         var types = Ingredient.Type.values();
         for (Ingredient.Type type: types) {
             model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
