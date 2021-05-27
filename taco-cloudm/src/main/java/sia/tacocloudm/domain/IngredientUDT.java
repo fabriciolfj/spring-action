@@ -11,7 +11,6 @@ import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 @UserDefinedType("ingredient")
 public class IngredientUDT {
     private String name;

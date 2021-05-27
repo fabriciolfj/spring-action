@@ -6,4 +6,4 @@ spring:
       keyspace-name: tacocloud
       schema-action: recreate-drop-unused
       local-datacenter: datacenter1
-      port: 9042ç
+      port: 9042
