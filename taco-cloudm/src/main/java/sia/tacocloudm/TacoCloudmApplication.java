@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import sia.tacocloudm.domain.Ingredient;
 import sia.tacocloudm.repository.IngredientRepository;
 
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = "sia.tacocloudm.repository")
 public class TacoCloudmApplication implements CommandLineRunner {
 
     @Autowired

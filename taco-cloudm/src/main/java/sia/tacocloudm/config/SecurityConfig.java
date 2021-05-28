@@ -2,7 +2,9 @@ package sia.tacocloudm.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +14,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import sia.tacocloudm.repository.UserRepository;
 
 @Configuration
-public class SecurityConfig  {
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -36,18 +39,46 @@ public class SecurityConfig  {
     * A ordem possui procedência, ou seja, a primeira e sobre sai sobre a segunda.
     * usado para aplicacao mvn, para rest usa-se WebSecurityConfigurerAdapter
     * */
-    @Bean
+    /*@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
+        return http.csrf()
+                .disable()
                 .authorizeRequests()
-                .antMatchers("/design", "/orders", "/orders/current")
-                .hasRole("USER")
-                .antMatchers("/", "/**").permitAll()
-                .and().formLogin().loginPage("/login")
-                .defaultSuccessUrl("/design", true)
+                    .antMatchers("/design", "/orders", "/orders/current")
+                    .hasRole("USER")
+                    .antMatchers("/", "/**").permitAll()
                 .and()
-                .oauth2Login().loginPage("/login")
-                .and().build();
+                    .formLogin()
+                    .loginPage("/login")
+                .defaultSuccessUrl("/design", true)
+                //.and()
+                //.oauth2Login().loginPage("/login")
+                .and()
+                    .logout()
+                    .logoutSuccessUrl("/")
+                .and()
+                    .build();
+    }*/
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/design", "/orders")
+                .hasRole("USER")
+                .antMatchers("/h2-console/**", "/register", "/console/**").permitAll()
+                .antMatchers("/", "/**").permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/design", true)
+                //.and()
+                //.oauth2Login().loginPage("/login")
+                .and()
+                .logout()
+                .logoutSuccessUrl("/");
+        http.headers().frameOptions().disable();
     }
 
     /*@Bean

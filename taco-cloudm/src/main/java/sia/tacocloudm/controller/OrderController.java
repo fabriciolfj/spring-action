@@ -2,6 +2,7 @@ package sia.tacocloudm.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import sia.tacocloudm.domain.Taco;
 import sia.tacocloudm.domain.TacoOrder;
+import sia.tacocloudm.domain.User;
 import sia.tacocloudm.repository.OrderRepository;
 
 import javax.validation.Valid;
@@ -31,13 +33,14 @@ public class OrderController {
     }
 
     @PostMapping
-    public String processOrder(@Valid TacoOrder tacoOrder, Errors errors, SessionStatus sessionStatus) {
+    public String processOrder(@Valid TacoOrder tacoOrder, Errors errors, SessionStatus sessionStatus, @AuthenticationPrincipal User user) {
         if(errors.hasErrors()) {
             return "orderForm";
         }
 
         log.info("Order submitted: {}", tacoOrder);
         tacoOrder.setPlacedAt(new Date());
+        tacoOrder.setUser(user);
         orderRepository.save(tacoOrder);
         sessionStatus.setComplete();
         return "redirect:/";
