@@ -14,6 +14,7 @@ import sia.tacocloudm.domain.Taco;
 import sia.tacocloudm.domain.TacoOrder;
 import sia.tacocloudm.domain.User;
 import sia.tacocloudm.repository.OrderRepository;
+import sia.tacocloudm.service.TacoOrderService;
 
 import javax.validation.Valid;
 import java.util.Date;
@@ -24,7 +25,7 @@ import java.util.Date;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final OrderRepository orderRepository;
+    private final TacoOrderService tacoOrderService;
 
     @GetMapping("/current")
     public String orderForm(Model model) {
@@ -41,8 +42,15 @@ public class OrderController {
         log.info("Order submitted: {}", tacoOrder);
         tacoOrder.setPlacedAt(new Date());
         tacoOrder.setUser(user);
-        orderRepository.save(tacoOrder);
+        tacoOrderService.save(tacoOrder);
         sessionStatus.setComplete();
         return "redirect:/";
     }
+
+    @GetMapping
+    public String ordersForUser(final @AuthenticationPrincipal User user, final Model model) {
+        model.addAttribute("orders", tacoOrderService.getList(user));
+        return "orderList";
+    }
+
 }
