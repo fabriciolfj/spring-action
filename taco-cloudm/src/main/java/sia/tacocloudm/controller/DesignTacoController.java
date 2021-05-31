@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import sia.tacocloudm.domain.Ingredient;
 import sia.tacocloudm.domain.Taco;
 import sia.tacocloudm.repository.IngredientRepository;
+import sia.tacocloudm.repository.TacoRepository;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -27,6 +28,8 @@ public class DesignTacoController {
 
     @Autowired
     private IngredientRepository ingredientRepository;
+    @Autowired
+    private TacoRepository tacoRepository;
 
     @GetMapping
     public String showDesignForm(final Model model) {
@@ -41,6 +44,7 @@ public class DesignTacoController {
         }
 
         log.info("Processing taco: {}", taco);
+        tacoRepository.save(taco);
         return "redirect:/orders/current";
     }
 

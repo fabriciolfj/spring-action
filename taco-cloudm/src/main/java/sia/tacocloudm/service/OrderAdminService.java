@@ -1,6 +1,7 @@
 package sia.tacocloudm.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import sia.tacocloudm.repository.OrderRepository;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderAdminService {
@@ -25,5 +27,13 @@ public class OrderAdminService {
     @PostAuthorize("hasRole('ADMIN') || returnObject.user.username == authentication.name")
     public TacoOrder getOrder(final Long id) {
         return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found " + id));
+    }
+
+    public void deleteOrder(final Long id) {
+        try {
+            orderRepository.deleteById(id);
+        } catch (Exception e) {
+            log.info("Order not found too delete: {}", id);
+        }
     }
 }
