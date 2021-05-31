@@ -40,4 +40,8 @@ public class IngredientService {
             log.info("Fail delete ingredient, ID: {}", id);
         }
     }
+
+    public Ingredient save(final Ingredient ingredient) {
+        return ingredientRepository.save(ingredient);
+    }
 }

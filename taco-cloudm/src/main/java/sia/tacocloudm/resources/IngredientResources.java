@@ -39,4 +39,9 @@ public class IngredientResources {
     public void delete(@PathVariable("id") final String id) {
         ingredientService.delete(id);
     }
+
+    @PostMapping
+    public Ingredient create(@RequestBody final Ingredient ingredient) {
+        return ingredientService.save(ingredient);
+    }
 }
