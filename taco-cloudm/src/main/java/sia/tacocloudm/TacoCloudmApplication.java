@@ -5,8 +5,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import sia.tacocloudm.domain.Ingredient;
+import sia.tacocloudm.domain.User;
 import sia.tacocloudm.repository.IngredientRepository;
+import sia.tacocloudm.repository.UserRepository;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "sia.tacocloudm.repository")
@@ -14,6 +17,12 @@ public class TacoCloudmApplication implements CommandLineRunner {
 
     @Autowired
     private IngredientRepository repo;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(TacoCloudmApplication.class, args);
@@ -31,5 +40,18 @@ public class TacoCloudmApplication implements CommandLineRunner {
         repo.save(new Ingredient("JACK", "Monterrey Jack", Ingredient.Type.CHEESE));
         repo.save(new Ingredient("SLSA", "Salsa", Ingredient.Type.SAUCE));
         repo.save(new Ingredient("SRCR", "Sour Cream", Ingredient.Type.SAUCE));
+
+        userRepository.save(
+                User.builder()
+                        .city("Serrana")
+                        .fullname("admin")
+                        .password(passwordEncoder.encode("admin"))
+                        .phoneNumber("16988485252")
+                        .state("SP")
+                        .street("Rua acre n122")
+                        .username("admin")
+                        .zip("14150000")
+                        .build()
+        );
     }
 }
