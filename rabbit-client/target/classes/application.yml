@@ -1,0 +1,7 @@
+spring:
+  rabbitmq:
+    host: localhost
+server:
+  port: 8585
+
+
