@@ -33,3 +33,4 @@ export SERVER_PORT=9090
     </root>
 </configuration>
 ```
+### Spring integration
