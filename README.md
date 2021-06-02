@@ -34,3 +34,4 @@ export SERVER_PORT=9090
 </configuration>
 ```
 ### Spring integration
+- Responsável pela integração com sistemas externos, seja: arquivos, apis ou mensageria.
