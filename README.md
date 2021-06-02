@@ -38,10 +38,15 @@ export SERVER_PORT=9090
 - Utiliza-se canais (que são configurações de entrada e saida de dados) para o fluxo de integração.
 - Os canais serve como conduíte, que conecta o transformador com o adaptador de canal de saída.
 - Os componentes envolvidos, na maioria dos casos, são:
-  - gateway
-  - canais
-  - transformador
-  - adaptador de canal 
+  - gateway -> passe dados para um fluxo de integração, através de uma interface
+  - canais -> passa mensagens de um elemento para outro
+  - filters -> permite que as mensagens passem de forma condicional pelo flulxo
+  - transformador -> modifica a mensagem
+  - routers -> mensagens diretas para um dos vários canais, normalmente com base em cabeçalhos da mensagem
+  - splitters -> divide as mensagens recebidas em duas ou mais, cada uma enviada para canais diferentes
+  - aggregators -> combina várias mensagens que vêm de canais separados em uma única mensagem
+  - channel adapters -> conecta o canal a um sistema externo ou transporte
+  - service activators -> méthodo java aonde a mensagem será encaminhada e seu retorno irá para channel de saida.
 - Exemplo abaixo (configuração xml):
 ```
 <?xml version="1.0" encoding="UTF-8"?>
