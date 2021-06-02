@@ -33,3 +33,58 @@ export SERVER_PORT=9090
     </root>
 </configuration>
 ```
+### Spring integration
+- Responsável pela integração com sistemas externos, seja: arquivos, apis ou mensageria.
+- Utiliza-se canais (que são configurações de entrada e saida de dados) para o fluxo de integração.
+- Os canais serve como conduíte, que conecta o transformador com o adaptador de canal de saída.
+- Os componentes envolvidos, na maioria dos casos, são:
+  - gateway -> passe dados para um fluxo de integração, através de uma interface
+  - canais -> passa mensagens de um elemento para outro
+  - filters -> permite que as mensagens passem de forma condicional pelo flulxo
+  - transformador -> modifica a mensagem
+  - routers -> mensagens diretas para um dos vários canais, normalmente com base em cabeçalhos da mensagem
+  - splitters -> divide as mensagens recebidas em duas ou mais, cada uma enviada para canais diferentes
+  - aggregators -> combina várias mensagens que vêm de canais separados em uma única mensagem
+  - channel adapters -> conecta o canal a um sistema externo ou transporte
+  - service activators -> méthodo java aonde a mensagem será encaminhada e seu retorno irá para channel de saida.
+- Exemplo abaixo (configuração xml):
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:int="http://www.springframework.org/schema/integration"
+  xmlns:int-file="http://www.springframework.org/schema/integration/file"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd
+    http://www.springframework.org/schema/integration/file
+    http://www.springframework.org/schema/integration/file/spring-integration-file.xsd">
+
+  <int:channel id="textInChannel" />
+
+  <int:transformer id="upperCase"
+      input-channel="textInChannel"
+      output-channel="fileWriterChannel"
+      expression="payload.toUpperCase()" />
+
+  <int:channel id="fileWriterChannel" />
+
+  <int-file:outbound-channel-adapter id="writer"
+    channel="fileWriterChannel"
+    directory="/tmp/sia6/files"
+    mode="APPEND"
+    append-new-line="true" />
+
+</beans>
+```
+
+- Interface utilizada pela configuração acima:
+```
+@MessagingGateway(defaultRequestChannel = "textInChannel")
+public interface FileWriterGateway {
+
+    void writeToFile(@Header(FileHeaders.FILENAME) String fileName, String data);
+}
+
+```
