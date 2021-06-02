@@ -35,7 +35,14 @@ export SERVER_PORT=9090
 ```
 ### Spring integration
 - Responsável pela integração com sistemas externos, seja: arquivos, apis ou mensageria.
-- Utiliza canais como meio de integração, exemplo abaixo (configuração xml):
+- Utiliza-se canais (que são configurações de entrada e saida de dados) para o fluxo de integração.
+- Os canais serve como conduíte, que conecta o transformador com o adaptador de canal de saída.
+- Os componentes envolvidos, na maioria dos casos, são:
+  - gateway
+  - canais
+  - transformador
+  - adaptador de canal 
+- Exemplo abaixo (configuração xml):
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
