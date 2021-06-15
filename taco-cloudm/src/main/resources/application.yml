@@ -9,12 +9,9 @@ spring:
 #            scope: email, public_profile
   thymeleaf:
     cache: false
-  rabbitmq:
-    host: localhost
-  jms:
-    template:
-      default-destination:
-        tacocloud.order.queue
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
   datasource:
     generate-unique-name: false
     name: tacocloud
