@@ -10,6 +10,8 @@ spring:
   thymeleaf:
     cache: false
   kafka:
+    template:
+      default-topic: tacocloud.orders.topic
     bootstrap-servers:
       - localhost:9092
   datasource:
