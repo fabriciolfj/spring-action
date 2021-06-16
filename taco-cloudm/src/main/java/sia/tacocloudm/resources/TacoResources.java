@@ -3,7 +3,8 @@ package sia.tacocloudm.resources;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import sia.tacocloudm.domain.TacoOrder;
+import reactor.core.publisher.Mono;
+import sia.tacocloudm.domain.Order;
 import sia.tacocloudm.service.TacoOrderService;
 
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ public class TacoResources {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody final TacoOrder order) {
-        orderService.save(order);
+    public Mono<Order> create(@RequestBody final Order order) {
+        return orderService.save(order);
     }
 }

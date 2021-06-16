@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import sia.tacocloudm.domain.TacoOrder;
+import sia.tacocloudm.domain.Order;
 import sia.tacocloudm.messaging.OrderMessagingService;
 
 @Slf4j
@@ -18,7 +18,7 @@ public class KafkaOrderMessagingService implements OrderMessagingService {
     private ObjectMapper objectMapper;
 
     @Override
-    public void sendOrder(TacoOrder order) {
+    public void sendOrder(Order order) {
         try {
             kafkaTemplate.sendDefault(objectMapper.writeValueAsString(order));
         } catch (Exception e) {

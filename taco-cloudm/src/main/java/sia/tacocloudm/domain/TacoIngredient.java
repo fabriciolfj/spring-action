@@ -10,10 +10,10 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @Data
 @Table("Taco_Ingredients")
-public class TacoOrder {
+public class TacoIngredient {
 
     @Column("taco")
     private Long idTaco;
-    @Column("tacoOrder")
-    private Long idOrder;
+    @Column("ingredient")
+    private String idIngredient;
 }

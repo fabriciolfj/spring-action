@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import sia.tacocloudm.domain.Ingredient;
 import sia.tacocloudm.repository.IngredientRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -17,20 +16,21 @@ public class IngredientService {
 
     private final IngredientRepository ingredientRepository;
 
-    public List<Ingredient> findAll() {
+    public Flux<Ingredient> findAll() {
         return ingredientRepository.findAll();
     }
 
-    public Optional<Ingredient> findById(final String id) {
-        return ingredientRepository.findById(id);
+    public Mono<Ingredient> findById(final String id) {
+        return ingredientRepository.findById(id)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new RuntimeException("Ingredient not found: " + id))));
     }
 
-    public Ingredient update(final String id, final Ingredient ingredient) {
+    public Mono<Ingredient> update(final String id, final Ingredient ingredient) {
         return ingredientRepository.findById(id)
-                .map(entity -> {
+                .flatMap(entity -> {
                     BeanUtils.copyProperties(ingredient, entity, "id");
                     return ingredientRepository.save(entity);
-                }).orElseThrow(() -> new RuntimeException("Ingredient not found " + id));
+                }).switchIfEmpty(Mono.defer(() -> Mono.error(new RuntimeException("Ingredient not found: " + id))));
     }
 
     public void delete(final String id) {
@@ -41,7 +41,7 @@ public class IngredientService {
         }
     }
 
-    public Ingredient save(final Ingredient ingredient) {
+    public Mono<Ingredient> save(final Ingredient ingredient) {
         return ingredientRepository.save(ingredient);
     }
 }

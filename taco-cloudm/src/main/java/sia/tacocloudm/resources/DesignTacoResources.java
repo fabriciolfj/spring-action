@@ -6,6 +6,8 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import sia.tacocloudm.domain.Taco;
 import sia.tacocloudm.service.TacoService;
 
@@ -20,28 +22,22 @@ public class DesignTacoResources {
     private final TacoService tacoService;
 
     @GetMapping("/recent")
-    public CollectionModel<EntityModel<Taco>> recentTacos() {
-        var tacos = tacoService.getRecentTacos();
-
-        var recentResources = CollectionModel.wrap(tacos);
-        recentResources.add(Link.of("http://localhost:8080/designtaco/recent", "recents"));
-        return recentResources;
+    public Flux<Taco> recentTacos() {
+        return tacoService.getRecentTacos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Taco> tacoById(@PathVariable("id") final Long id) {
-        return tacoService.findById(id)
-                .map(t -> ResponseEntity.ok(t))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public Mono<Taco> tacoById(@PathVariable("id") final Long id) {
+        return tacoService.findById(id);
     }
 
     @PostMapping
-    public Taco postTaco(@RequestBody final Taco taco) {
+    public Mono<Taco> postTaco(@RequestBody final Taco taco) {
         return tacoService.save(taco);
     }
 
     @PutMapping("/{id}")
-    public Taco putTaco(@PathVariable("id") final Long id, @RequestBody final Taco taco) {
+    public Mono<Taco> putTaco(@PathVariable("id") final Long id, @RequestBody final Taco taco) {
         return tacoService.update(taco, id);
     }
 }

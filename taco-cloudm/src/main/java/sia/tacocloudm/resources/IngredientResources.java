@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import sia.tacocloudm.domain.Ingredient;
 import sia.tacocloudm.service.IngredientService;
 
@@ -18,19 +20,17 @@ public class IngredientResources {
     private final IngredientService ingredientService;
 
     @GetMapping
-    public List<Ingredient> findAll() {
+    public Flux<Ingredient> findAll() {
         return ingredientService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ingredient> findById(@PathVariable("id") final String id) {
-        return  ingredientService.findById(id)
-                .map(entity -> ResponseEntity.ok(entity))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public Mono<Ingredient> findById(@PathVariable("id") final String id) {
+        return  ingredientService.findById(id);
     }
 
     @PutMapping("/{id}")
-    public Ingredient update(@PathVariable("id") final String id, @RequestBody final Ingredient ingredient) {
+    public Mono<Ingredient> update(@PathVariable("id") final String id, @RequestBody final Ingredient ingredient) {
         return ingredientService.update(id, ingredient);
     }
 
@@ -41,7 +41,7 @@ public class IngredientResources {
     }
 
     @PostMapping
-    public Ingredient create(@RequestBody final Ingredient ingredient) {
+    public Mono<Ingredient> create(@RequestBody final Ingredient ingredient) {
         return ingredientService.save(ingredient);
     }
 }
