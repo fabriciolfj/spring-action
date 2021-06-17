@@ -1,15 +1,20 @@
 package com.github.fabriciolfj.springclient.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ingredient {
+@Builder
+public class Taco {
 
-    private String id;
+    private Long id;
     private String name;
-    private String type;
+    private Set<String> ingredientIds = new HashSet<>();
 }

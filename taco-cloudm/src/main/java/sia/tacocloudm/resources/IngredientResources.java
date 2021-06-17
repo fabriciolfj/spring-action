@@ -36,12 +36,12 @@ public class IngredientResources {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") final String id) {
-        ingredientService.delete(id);
+    public Mono<Void> delete(@PathVariable("id") final String id) {
+        return ingredientService.delete(id);
     }
 
     @PostMapping
     public Mono<Ingredient> create(@RequestBody final Ingredient ingredient) {
-        return ingredientService.save(ingredient);
+        return ingredientService.save(ingredient).log();
     }
 }

@@ -1,15 +1,15 @@
 package com.github.fabriciolfj.springclient.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Ingredient {
+@AllArgsConstructor
+@Builder
+public class Teste {
 
-    private String id;
-    private String name;
-    private String type;
+    private String value;
 }

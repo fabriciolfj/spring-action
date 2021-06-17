@@ -9,6 +9,8 @@ import reactor.core.publisher.Mono;
 import sia.tacocloudm.domain.Ingredient;
 import sia.tacocloudm.repository.IngredientRepository;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,12 +35,8 @@ public class IngredientService {
                 }).switchIfEmpty(Mono.defer(() -> Mono.error(new RuntimeException("Ingredient not found: " + id))));
     }
 
-    public void delete(final String id) {
-        try {
-            ingredientRepository.deleteById(id);
-        } catch (Exception e) {
-            log.info("Fail delete ingredient, ID: {}", id);
-        }
+    public Mono<Void> delete(final String id) {
+        return ingredientRepository.deleteById(id);
     }
 
     public Mono<Ingredient> save(final Ingredient ingredient) {

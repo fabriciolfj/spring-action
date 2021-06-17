@@ -1,6 +1,7 @@
 package sia.tacocloudm.resources;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,7 +18,7 @@ public class DesignTacoResources {
 
     @GetMapping("/recent")
     public Flux<Taco> recentTacos() {
-        return tacoService.getRecentTacos();
+        return tacoService.getRecentTacos().take(12);
     }
 
     @GetMapping("/{id}")
@@ -26,6 +27,7 @@ public class DesignTacoResources {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<Taco> postTaco(@RequestBody final Taco taco) {
         return tacoService.save(taco);
     }
