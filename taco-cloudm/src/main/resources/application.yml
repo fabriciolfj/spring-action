@@ -27,7 +27,17 @@ spring:
     username: admin
     password: admin
 
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 taco:
   orders:
     pageSize: 10 #export TACO_ORDERS_PAGESIZE=10
 
+info:
+  email: fabricio.jacob@outlook.com
